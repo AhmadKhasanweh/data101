@@ -1,24 +1,19 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var app = express();
+let express = require('express');
+let mongoose = require('mongoose');
+let app = express();
+// let router = express.Router();
+let port = process.env.PORT || 3001;
 
-mongoose.connect('mongodb://root:nothing@ds135049.mlab.com:35049/ahmed_6569_db' || process.env.MONGODB_URI);
-db = mongoose.connection;
-db.once('open', () => {
-  console.log('mongoDB is open');
-});
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(express.static('./client'));
+require('./server/middleware.js') (app,express);
+require('./server/routes.js') (app,express);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.listen(port, function() {
+ console.log(`api running on port ${port}`);
 });
 
-var PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log('server is listning ' + PORT);
-});
+mongoose.connect('mongodb://localhost:27017/data101');
 
-module.exports = app;
+let db = mongoose.connection;
+db.once('open', function () {
+  console.log(`mongoose is working on 27017`);
+})

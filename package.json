@@ -3,17 +3,27 @@
   "version": "1.0.0",
   "description": "import to MongoDB and immigrate to Mysql",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Ahmad Khasawneh",
-  "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.1",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "mongoose": "^4.9.4",
-    "morgan": "^1.8.1",
+    "foreman": "^2.0.0",
+    "marked": "^0.3.6",
+    "mongoose": "^4.9.5",
+    "nodemon": "^1.11.0",
     "path": "^0.12.7",
-    "router": "^1.3.0"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start-dev": "nf start -p 3000",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
