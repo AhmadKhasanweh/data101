@@ -1,42 +1,55 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 class MongoDB extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { data: [] };
-  //   this.loadDataFromServer = this.loadDataFromServer.bind(this);
-  // }
-
-  // loadDataFromServer() {
-  //   axios.get('http://localhost:300/api/installation')
-  //     .then(res => {
-  //       console.log(res);
-  //       this.setState({ data: res.data });
-  //   })
-  //     .catch(err => {
-  //       console.log(err);
-  //     })
-  // }
- 
-  /*
-  handleCommentSubmit(comment) {
-    let comments = this.state.data;
-    comment.id = Date.now();
-    let newComments = comments.concat([comment]);
-    this.setState({ data: newComments });
-    axios.post(this.props.url, comment)
-    .catch(err => {
-      console.error(err);
-      this.setState({ data: comments });
-    });
+  constructor(props) {
+    super(props);
+    this.loadData = this.loadData.bind(this);
+    this.submitData = this.submitData.bind(this);
+    this.state = { 
+      data: [],  
+      installationIsAvailable: false
+    };
   }
-  */
+
+  loadData() {    
+    return fetch("http://localhost:3100/api/installation", {
+      method: 'GET'
+    })
+    .then( (response) => {
+      return response.json() })   
+      .then( (json) => {
+        this.setState({data: json});
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  }
+ 
+  
+  submitData(comment) {
+    console.log(this.state.installationIsAvailable);
+    if(this.state.installationIsAvailable){
+      return; 
+    }
+    return fetch("http://localhost:3100/api/installation", {
+      method: 'POST'
+    })
+    .then( res => {
+      this.setState({installationIsAvailable: true}, () => {
+        this.loadData();
+      });
+    })
+    .catch( err => {
+      console.log(err);
+      return err;
+    })
+  }
+  
 
   render () {
     let data = this.state.data;
-    console.log(data)
     return (
       <div className="row">
         <div className="col-md-3">
@@ -45,7 +58,19 @@ class MongoDB extends Component {
         </div>
         <div className="col-md-6">
           <div>
-            <p> Hey from MongoDB Component {data}</p>
+            <p> Hey from MongoDB Component</p>
+              {data.map(listValue => {
+                return (
+                  <ol key={listValue.objectId}>
+                    <li>{listValue.objectId}</li>
+                    <li>{listValue.name}</li>
+                    <li>{listValue.deviceToken}</li>
+                    <li>{listValue.installationId}</li>
+                  </ol>
+                )
+              })}
+            <button className="btn btn-success" onClick={this.loadData}>Show data</button>
+            <button className="btn btn-success" onClick={this.submitData}>Post Data</button>
           </div>
         </div>
       </div>
@@ -53,4 +78,5 @@ class MongoDB extends Component {
   }
 
 }
+
 export default MongoDB;

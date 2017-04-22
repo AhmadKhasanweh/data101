@@ -5,8 +5,8 @@ let path = require('path');
 module.exports = {
   
   export: (req, res) => {
-    installationModel.find({}).exec(function (err, data) {
-      res.send(data);
+    installationModel.find({}).lean().exec(function (err, data) {
+      res.send(JSON.stringify(data));
     })
   }, 
 
